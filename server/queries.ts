@@ -4,32 +4,27 @@ import { auth } from "@clerk/nextjs/server";
 import { UserThread } from '@/server/db/schemas';
 import { v4 as uuidv4 } from 'uuid';
 
-// export async function addUserThread(userThread: Omit<UserThread, 'id' | 'thread'>) {
-//   try {
-//     const newUserThread: UserThread = {
-//       ...userThread,
-//       id: uuidv4(),
-//       userId: ,
-//       threadId: ,
-//       createdAt: ,
-
-//     };
-
-//     const [insertedJob] = await db.insert(UserThread).values(newJobPosting).returning();
-//     return insertedJob;
-//   } catch (error) {
-//     throw new Error('Failed to add job posting');
-//   }
-// }
-
-
-export const getUserThread = async (): Promise<UserThread[]> => {
-  // const { userId } = await auth();
-  const userId = "abbottjc"
-
+export const getUserThread = async (userId: string): Promise<UserThread | null> => {
   if (!userId) {
-    throw new Error("User not authenticated");
+    throw new Error("User ID is required")
   }
 
-  return db.select().from(UserThread).where(eq(UserThread.userId, userId));
-};
+  const userThreads = await db.select().from(UserThread).where(eq(UserThread.userId, userId)).limit(1)
+  return userThreads.length > 0 ? userThreads[0] : null
+}
+
+export const addUserThread = async (userId: string, threadId: string): Promise<UserThread> => {
+  if (!userId || !threadId) {
+    throw new Error("User ID and Thread ID are required")
+  }
+
+  const newUserThread = {
+    id: uuidv4(),
+    userId,
+    threadId,
+    createdAt: new Date(),
+  }
+
+  const [insertedUserThread] = await db.insert(UserThread).values(newUserThread).returning()
+  return insertedUserThread
+}

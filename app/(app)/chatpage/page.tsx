@@ -1,28 +1,43 @@
 "use client"
 
-import { ThreadMessage } from "openai/resource/beta/threads/index.mjs";
-import React, {useState} from "react";
+import type { ThreadMessage } from "openai/resource/beta/threads/index.mjs"
+import React, { useState, useEffect } from "react"
 
-function landingpage() {
-    const [fetching, setFetching] = useState(false);
-    const [messages, setMessages] = useState<ThreadMessage[]>([]);
+export default function ChatPage() {
+  const [fetching, setFetching] = useState(false)
+  const [messages, setMessages] = useState<ThreadMessage[]>([])
 
-    const fetchMessages = async () => {
-        // TODO: api/message list
+  useEffect(() => {
+    fetchMessages()
+  }, [])
+
+  const fetchMessages = async () => {
+    setFetching(true)
+    try {
+      // TODO: Implement API call to fetch messages
+      // const response = await fetch('/api/messages');
+      // const data = await response.json();
+      // setMessages(data.messages);
+    } catch (error) {
+      console.error("Error fetching messages:", error)
+    } finally {
+      setFetching(false)
     }
+  }
 
-    return (
-        <div className="w-screen h-screen flex flex-col bg-grey text-black">
-            <div className="flex-grow overflow-y-hidden p-8 space-y-2">
-                {fetching && <div className='text-center font-bold'> Loading... </div>}
-                {messages.length === 0 && !fetching && (
-                    <div className='text-center font-bold'> No messages yet </div>
-                )}
-            </div>
-        </div>
-    )
-
+  return (
+    <div className="w-full h-full flex flex-col bg-gray-100 text-black">
+      <div className="flex-grow overflow-y-auto p-8 space-y-2">
+        {fetching && <div className="text-center font-bold"> Loading... </div>}
+        {messages.length === 0 && !fetching && <div className="text-center font-bold"> No messages yet </div>}
+        {messages.map((message, index) => (
+          <div key={index} className="p-2 bg-white rounded shadow">
+            {/* Display message content here */}
+            {message.content}
+          </div>
+        ))}
+      </div>
+    </div>
+  )
 }
-
-export default landingpage;
 

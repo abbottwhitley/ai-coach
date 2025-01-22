@@ -7,8 +7,8 @@ import Navbar from "@/components/Navbar";
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
-  title: "Goggins AI",
-  description: "David Goggins AI Coach",
+  title: "My AI Coach",
+  description: "My AI Coach",
   // manifest: "/manifest.json",
   // icons: { apple: "/icon-192x192.png" },
 };
@@ -29,7 +29,3 @@ export default function RootLayout({
     </ClerkProvider>
   );
 }
-
-
-
-
