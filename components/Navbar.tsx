@@ -24,7 +24,7 @@ export default function Navbar() {
 
 
     return (
-        <div className="p-4 flex flex-row justify-between items-center bg-blue-800 text-white">
+        <div className="p-4 flex flex-row justify-between items-center bg-black text-white ">
             <Link href="/">
                 <h1 className="text-2xl font-bold">My AI Coach</h1>
             </Link>
@@ -35,7 +35,7 @@ export default function Navbar() {
                             key={idx}
                             href={route.path}
                             className={
-                                pathname === route.path ? "text-white" : "text-gray-400"
+                                pathname === route.path ? "border-b-2 border-yellow-500" : ""
                             }
                         >
                             {route.name}

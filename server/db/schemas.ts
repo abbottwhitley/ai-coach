@@ -43,3 +43,4 @@ import { threadId } from "worker_threads";
   
   // Export the schema for use in other files
   export type Assistant = typeof Assistant.$inferSelect;
+  export type UserThread = typeof UserThread.$inferSelect;
