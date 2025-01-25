@@ -1,7 +1,7 @@
 import { db } from './db/drizzle';
 import { eq, and, desc } from "drizzle-orm";
 import { auth } from "@clerk/nextjs/server";
-import { UserThread } from '@/server/db/schemas';
+import { Assistant, UserThread } from '@/server/db/schemas';
 import { v4 as uuidv4 } from 'uuid';
 
 export const getUserThread = async (userId: string): Promise<UserThread | null> => {
@@ -27,4 +27,10 @@ export const addUserThread = async (userId: string, threadId: string): Promise<U
 
   const [insertedUserThread] = await db.insert(UserThread).values(newUserThread).returning()
   return insertedUserThread
+}
+
+export const getAssistants = async (): Promise<Assistant | null> => {
+
+  const assistant = await db.select().from(Assistant).limit(1)
+  return assistant.length > 0 ? assistant[0] : null
 }

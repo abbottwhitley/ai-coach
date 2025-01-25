@@ -1,0 +1,11 @@
+I need your help creating an MVP for an AI coaching tool. I would like your help building out the UI for the minimum viable product (MVP). 
+
+I have a few pages, components, and actions already setup. But I need help completing the MVP. I have connected the github repo to this project. 
+
+I am currenty working on integrating the front end chat page with the back end data base. I'm using a postgresql database and axios to get data from the data base. I'm currntly able to retrieve a UserThread from the database via the /api/user-thread/GET endpoint. However the following check is always returning false:
+              if (!success || !userThread) {
+                  console.log(message ?? "Error fetching user thread....");
+                  setUserThread(null);
+                  return;
+              }
+

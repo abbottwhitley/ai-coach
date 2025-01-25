@@ -7,8 +7,13 @@ export async function POST(req: NextRequest){
 
     if (!threadId || !runId) {
         return NextResponse.json(
-            {error: "Thread ID and run ID are required", success: false},
-            {status: 400}
+            {
+                error: "Thread ID and run ID are required", 
+                success: false
+            },
+            {
+                status: 400
+            }
         )
     };
 
@@ -18,13 +23,26 @@ export async function POST(req: NextRequest){
         const run = await openai.beta.threads.runs.retrieve(threadId, runId);   
         console.log("from openai run", run);
         
-        return NextResponse.json({run, success: true}, {status: 200});
+        return NextResponse.json(
+            {
+                run,
+                success: true
+            }, 
+            {
+                status: 200
+            }
+        );
 
     } catch (error) {
         console.error(error);
         return  NextResponse.json(
-            {error: "Something went wrong", success: false},
-            {status: 500}
+            {
+                error: "Something went wrong", 
+                success: false
+            },
+            {
+                status: 500
+            }
         );
     }
 }

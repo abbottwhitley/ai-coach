@@ -16,9 +16,19 @@ export async function GET(){
     
     // Get user threads from data base
     const userThread = await getUserThread(userId); 
+    console.log("User thread retrieved from DB:", userThread);
+
     
     if (userThread) {
-        return NextResponse.json({ success: true, userThread }, { status: 200 })
+        return NextResponse.json(
+            { 
+                success: true,
+                userThread 
+            }, 
+            {
+                status: 200
+           }
+        );
     }
 
     // Else create a new thread
@@ -33,12 +43,25 @@ export async function GET(){
 
   
         // Return the new thread
-        return NextResponse.json({ success: true, userThread }, { status: 200 })
+        return NextResponse.json(
+            { 
+                success: true, 
+                userThread: newUserThread 
+            }, 
+            {
+                status: 200
+           }
+        );
 
     } catch (error) {
         return NextResponse.json(
-            { success: false, message: "Internal Server Error"},
-            { status: 500}
+            { 
+                success: false, 
+                message: "Internal Server Error"
+            },
+            { 
+                status: 500
+            }
         );
     }
 }

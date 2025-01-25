@@ -7,8 +7,8 @@ import Navbar from "@/components/Navbar";
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
-  title: "My AI Coach",
-  description: "My AI Coach",
+  title: "My Stoic Coach",
+  description: "My Stoic Coach",
   // manifest: "/manifest.json",
   // icons: { apple: "/icon-192x192.png" },
 };

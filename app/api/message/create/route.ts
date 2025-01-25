@@ -3,14 +3,19 @@ import { NextResponse } from "next/server";
 import OpenAI from "openai";
 
 export async function POST(req: Request){
-    const {message, threadId} = await req.json();
+    const {message, threadId, fromUser = false} = await req.json();
 
-    console.log("from user", {message, threadId});
+    console.log("from user", {threadId});
 
     if (!threadId || !message) {
         return NextResponse.json(
-            { error: "threadId and message are required", success: false },
-            { status: 400 }
+            { 
+                error: "threadId and message are required", 
+                success: false 
+            },
+            { 
+                status: 400 
+            }
         );
     }
 
@@ -18,20 +23,33 @@ export async function POST(req: Request){
     try{
         const threadMessage = await openai.beta.threads.messages.create(threadId, {
             role: "user",
-            content: message
+            content: message,
+            metadata: {
+                fromUser,
+            }
         });
 
         console.log("from openai", threadMessage);
         
         return NextResponse.json(
-            { message: threadMessage, success: true },
-            {status: 201}    
+            {  
+                success: true,
+                message: threadMessage 
+            },
+            {
+                status: 201
+            }    
         );
     } catch (error) {
         console.error(error)
         return NextResponse.json(
-            { error: "Failed to create message", success: false },
-            { status: 500 }
+            { 
+                success: false, 
+                error: "Failed to create message"
+            },
+            { 
+                status: 500 
+            }
         );
     }
     
