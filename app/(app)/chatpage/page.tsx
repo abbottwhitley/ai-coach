@@ -3,7 +3,8 @@
 import { assistantAtom, userThreadAtom } from "@/atoms"
 import axios from "axios"
 import { useAtom } from "jotai"
-import { Run, ThreadMessage } from "openai/resource/beta/threads/index.mjs"
+import Run from "openai/index.mjs";
+import ThreadMessage from "openai/index.mjs";
 import React, { useState, useEffect, use, useCallback, useRef } from "react"
 import toast from "react-hot-toast";
 
