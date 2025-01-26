@@ -14,7 +14,6 @@ export default async function ProfilePage() {
 
     if (!userPromptPreferences) {
         userPromptPreferences = await addUserPromptPreferences(userId, "EASY", true);
-
     }
  
     return (

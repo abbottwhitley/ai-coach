@@ -2,15 +2,10 @@
 
 import { assistantAtom, userThreadAtom } from "@/atoms"
 import axios from "axios"
-import { index } from "drizzle-orm/mysql-core"
 import { useAtom } from "jotai"
-import { responseCookiesToRequestCookies } from "next/dist/server/web/spec-extension/adapters/request-cookies"
 import { Run, ThreadMessage } from "openai/resource/beta/threads/index.mjs"
-import { toNamespacedPath } from "path"
 import React, { useState, useEffect, use, useCallback, useRef } from "react"
-import { useFormStatus } from "react-dom"
 import toast from "react-hot-toast";
-import { threadId } from "worker_threads"
 
 
 const POLLING_FREQUENCY_MS = 1000
