@@ -3,8 +3,7 @@
 import { assistantAtom, userThreadAtom } from "@/atoms"
 import axios from "axios"
 import { useAtom } from "jotai"
-import Run from "openai/index.mjs";
-import ThreadMessage from "openai/index.mjs";
+import { Run, Message } from "openai/resources/beta/threads/index.mjs";
 import React, { useState, useEffect, use, useCallback, useRef } from "react"
 import toast from "react-hot-toast";
 
@@ -18,25 +17,26 @@ export default function ChatPage() {
 
   // State
   const [fetching, setFetching] = useState(false);
-  const [messages, setMessages] = useState<ThreadMessage[]>([]);
+  const [messages, setMessages] = useState<Message[]>([]);
   const [message, setMessage] = useState("");
   const [sending, setSending] = useState(false);
   const [pollingRun, setPollingRun] = useState(false);
   const bottomRef = useRef<HTMLDivElement>(null);
-  const prevMessagesRef = useRef<ThreadMessage[]>([]);
+  const prevMessagesRef = useRef<Message[]>([]);
     
   const fetchMessages = useCallback( async () => {
     if (!userThread) return;
      
     setFetching(true)
     
+    console.log("############### Calling POST /api/message/list ====>", userThread)    
     try {
       // Implement API call to fetch messages
       // NextResponse.json({success: true, message: response.data}, {status: 200})
       const response = await axios.post<{
         success: boolean;
         error?: string;
-        messages?: ThreadMessage[];
+        messages?: Message[];
       }>("api/message/list", {threadId: userThread.threadId})
 
       console.log("Response from POST /api/message/list ====>", response.data.messages)    
@@ -48,7 +48,6 @@ export default function ChatPage() {
       }
 
       let newMessages = response.data.messages;
-      // console.log("my newMessage ===>", newMessages ); 
 
       // Sort in descending order
       newMessages = newMessages
@@ -64,8 +63,6 @@ export default function ChatPage() {
             message.content[0].type === "text" &&
             message.content[0].text.value.trim() !== ""
         );
-      
-      // console.log("my newMessages after sorting and filtering ===>", newMessages ); 
 
       // Compare new messages with previous messages
       const prevMessages = prevMessagesRef.current;
@@ -142,9 +139,6 @@ export default function ChatPage() {
     // set a poll interval that gets triggered every x seconds
     
     const intervalId = setInterval(async () => {
-      // console.log("Polling run status...");
-      // console.log("threadId ===>", threadId);
-      // console.log("runId ===>", runId);
       try {
         
         const {
@@ -190,7 +184,6 @@ export default function ChatPage() {
 
   const sendMessage = async () => {
     // validation
-    console.log("!!!!!!!!!!!!!!!!!!! sendMessage called !!!!!!!!!!!!!!!!!!!");
     if (!userThread || sending || !assistant) {
       toast.error("Failed to send message. Invalid state.")
       return
@@ -200,12 +193,11 @@ export default function ChatPage() {
 
     try{
       // send message /api/message/create
-      console.log("########## MAKING CALL TO create message");
       const {
         data: {message: newMessages},
       } = await axios.post<{
         success: boolean;
-        message?: ThreadMessage;
+        message?: Message;
         error?: string;
       }>("api/message/create", {
         message,
@@ -222,7 +214,6 @@ export default function ChatPage() {
       setMessage("");
       toast.success("Message sent.");
       // start run is an asyn call, so we can await it
-      console.log("HERE IS MY THREAD ID =======================> ", userThread.threadId);
       const runId  = await startRun(userThread.threadId, assistant.assistantId)
       if (!runId) {
         toast.error("Failed to start run.");

@@ -13,19 +13,19 @@ const difficulties = [
     id: "EASY",
     level: "Easy",
     description:
-      "Receive 3 challenges per day (7:30AM, 12PM, & 5:30PM EST).",
+      "Receive 3 prompts per day (7:30AM, 12PM, & 5:30PM EST).",
   },
   {
     id: "MEDIUM",
     level: "Medium",
     description:
-      "Receive 4 challenges per day (7AM, 12PM, 5PM, & 8PM EST).",
+      "Receive 4 prompts per day (7AM, 12PM, 5PM, & 8PM EST).",
   },
   {
     id: "HARD",
     level: "Hard",
     description:
-      "Receive 5 challenges per day (6AM, 9AM, 12PM, 5PM, & 8PM EST).",
+      "Receive 5 prompts per day (6AM, 9AM, 12PM, 5PM, & 8PM EST).",
   },
 ];
 
