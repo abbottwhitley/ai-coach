@@ -1,16 +1,26 @@
 "use client"
 
-import { useEffect, useState } from "react"
+import { useCallback, useEffect, useState } from "react"
 import { Assistant, UserThread } from "@/server/db/schemas"
 import axios from "axios"
 import { useAtom } from "jotai"
 import { assistantAtom, userThreadAtom } from "@/atoms"
 import toast from "react-hot-toast"
+import useServiceWorker from "@/hooks/useServiceWorker";
+import NotificationModal from "@/components/NotificationModal";
 
 export default function ChatPageLayout({ children }: { children: React.ReactNode }) {
   
+  // Atom State
   const [, setUserThread] = useAtom(userThreadAtom)
   const [assistant, setAssistant] = useAtom(assistantAtom)
+
+  // State
+  const [isNotificationModalVisible, setIsNotificationModalVisible] =
+    useState(false);
+
+  // Hooks
+  useServiceWorker();
 
   // useEffect used to run on boot and check for assistant
   // makes a request to our backend. But requires that we wrap everything inside of 
@@ -87,9 +97,60 @@ export default function ChatPageLayout({ children }: { children: React.ReactNode
     getUserThread()
   }, [setUserThread])
 
+
+  useEffect(() => {
+    if ("Notification" in window) {
+      setIsNotificationModalVisible(Notification.permission === "default");
+      console.log("Notification permission:", Notification.permission);
+    }
+  }, []);
+
+  const saveSubscription = useCallback(async () => {
+    const serviceWorkerRegistration = await navigator.serviceWorker.ready;
+    const subscription = await serviceWorkerRegistration.pushManager.subscribe({
+      userVisibleOnly: true,
+      applicationServerKey: process.env.NEXT_PUBLIC_VAPID_PUBLIC_KEY,
+    });
+
+    try {
+      const response = await axios.post("/api/subscription", subscription);
+
+      if (!response.data.success) {
+        console.error(response.data.message ?? "Unknown error.");
+        toast.error("Failed to save subscription.");
+        return;
+      }
+    } catch (error) {
+      console.error(error);
+      toast.error("Failed to save subscription.");
+    }
+  }, []);
+
+  useEffect(() => {
+    if ("Notification" in window && "serviceWorker" in navigator) {
+      if (Notification.permission === "granted") {
+        saveSubscription();
+      }
+    }
+  }, [saveSubscription]);
+
+  const handleNotificationModalClose = (didConstent: boolean) => {
+    setIsNotificationModalVisible(false);
+
+    if (didConstent) {
+      toast.success("You will now receive notifications.");
+    }
+  };
+
+
   return (
   <div className="flex flex-col w-full h-full">
       {children}
+      {isNotificationModalVisible && (
+        <NotificationModal
+          onRequestClose={handleNotificationModalClose}
+          saveSubscription={saveSubscription}
+        />)}
   </div>
   )
 }

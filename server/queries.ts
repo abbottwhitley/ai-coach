@@ -82,6 +82,36 @@ export const updateUserPromptPreferences  = async (userId: string, challengeId: 
   return updatedPromptPreferences
 }
 
+export const createUserMeta  = async  (userId: string, endpoint: string, auth: string, p256dh: string): Promise<UserMeta> => {
+  if (!userId) {
+    throw new Error("User ID is required")
+  }
+
+  const newUserMeta = {
+    id: uuidv4(),
+    userId,
+    createdAt: new Date(),
+    updateAt: new Date(),
+    endpoint,
+    p256dh,
+    auth,
+  }
+   
+  const [insertedUserMeta] = await db.insert(UserMeta)
+                                        .values(newUserMeta)
+                                        .returning()
+  return insertedUserMeta
+}
+
+export const getUserMeta = async (userId: string): Promise<UserMeta | null> => {
+  if (!userId) {
+    throw new Error("User ID is required")
+  }
+
+  const userMeta = await db.select().from(UserMeta).where(eq(UserMeta.userId, userId)).limit(1)
+  return userMeta.length > 0 ? userMeta[0] : null
+}
+
 export const getUserMetaMany = async (userIds: string[]): Promise<UserMeta[]> => {
   if (!userIds) {
     throw new Error("User ID is required")
@@ -94,6 +124,24 @@ export const getUserMetaMany = async (userIds: string[]): Promise<UserMeta[]> =>
                               UserMeta.userId, userIds
                             ));
   return userMetas
+}
+
+export const updateUserMeta  = async (userId: string, endpoint: string, auth: string, p256dh: string): Promise<UserMeta> => {
+  if (!userId) {
+    throw new Error("User ID is required")
+  }
+  
+  const updatedUserMeta = await db.update(UserMeta)
+                                          .set({
+                                            endpoint: endpoint,
+                                            auth: auth,
+                                            p256dh: p256dh,
+                                          })
+                                          .where(eq(UserMeta.userId, userId))
+                                          .returning()
+                                          .then(res => res[0])
+
+  return updatedUserMeta
 }
 
 export const getUserPromptPreferencesMany = async (challengeId: string): Promise<UserPromptPreferences[]> => {
