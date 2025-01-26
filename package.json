@@ -39,6 +39,7 @@
     "@types/node": "^20",
     "@types/react": "19.0.7",
     "@types/react-dom": "19.0.3",
+    "@types/web-push": "^3.6.4",
     "@typescript-eslint/eslint-plugin": "^8.21.0",
     "@typescript-eslint/parser": "^8.21.0",
     "drizzle-kit": "^0.30.2",
