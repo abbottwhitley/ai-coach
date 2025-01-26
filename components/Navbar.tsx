@@ -24,7 +24,7 @@ export default function Navbar() {
 
 
     return (
-        <div className="p-4 flex flex-row justify-between items-center bg-black text-white ">
+        <div className="p-4 flex flex-row justify-between items-center" style={{ backgroundColor: 'var(--primary-color)', color: 'var(--text-color)' }}>
             <Link href="/">
                 <h1 className="text-2xl font-bold">My Stoic Coach</h1>
             </Link>
@@ -32,12 +32,11 @@ export default function Navbar() {
                 <div className="flex gap-x-6 text-lg items-center">
                     {routes.map((route, idx) => (
                         <Link
-                            key={idx}
-                            href={route.path}
-                            className={
-                                pathname === route.path ? "border-b-2 border-yellow-500" : ""
-                            }
-                        >
+                        key={idx}
+                        href={route.path}
+                        className={`px-4 ${pathname === route.path ? "border-b-2" : ""}`}
+                        style={pathname === route.path ? { borderColor: 'var(--secondary-color)' } : {}}
+                    >
                             {route.name}
                         </Link>
                     ))}

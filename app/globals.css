@@ -14,6 +14,11 @@ body {
 
 @layer base {
   :root {
+    --primary-color: rgb(27, 112, 146);
+    --secondary-color: rgb(126, 93, 21);
+    --text-color: rgb(4, 36, 53);
+    --background-color: rgb(187, 220, 235);
+    --secondary-background-color: rgb(183, 213, 233);
     --background: 0 0% 100%;
     --foreground: 222.2 84% 4.9%;
     --card: 0 0% 100%;

@@ -14,6 +14,8 @@ const isPublicRoute = createRouteMatcher([
   "/api/run/retrieve",
   "/api/run/create",
   "/api/user-thread",
+  "/api/challenge-users",
+  "/api/openai",
 ]);
 
 export default clerkMiddleware(async (auth, req) => {

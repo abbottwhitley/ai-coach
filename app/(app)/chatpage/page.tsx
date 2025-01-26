@@ -249,7 +249,7 @@ export default function ChatPage() {
   };
 
   return (
-    <div className="w-screen h-[calc(100vh-64px)] flex flex-col bg-black text-white">
+    <div className="w-screen h-[calc(100vh-64px)] flex flex-col" style={{ backgroundColor: 'var(--background-color)', color: 'var(--text-color)' }}>
       {/* MESSAGES */}
       <div className="flex-grow overflow-y-scroll p-8 space-y-2">
         {/* 1. FETCHING MESSAGES */}
@@ -269,7 +269,7 @@ export default function ChatPage() {
                 (message.metadata as { fromUser?: string }).fromUser ?? ""
               )
                 ? "bg-blue-500 ml-auto"
-                : "bg-gray-700"
+                : "bg-gray-400"
             }`}
           >
             {message.content[0].type === "text"
