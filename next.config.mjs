@@ -1,7 +1,6 @@
 /** @type {import('next').NextConfig} */
 import withPwa from "next-pwa";
 
-/** @type {import('next').NextConfig} */
 const nextConfig = withPwa({
   dest: "public",
   swSrc: "/public/custom-service-worker.js",
