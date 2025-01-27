@@ -9,7 +9,7 @@ const inter = Inter({ subsets: ["latin"] });
 export const metadata: Metadata = {
   title: "My Stoic Coach",
   description: "Daily Mindful Reminders",
-  manifest: "/manifest.json",
+  manifest: "/public/manifest.json",
   icons: { apple: "/icon-192x192.png" },
 };
 
